@@ -12,7 +12,7 @@ provider:
 
 functions:
   tasksAWS:
-    handler: handler.tasks
+    handler: handler.thoughts
     events:
       - http:
          path: Thoughts

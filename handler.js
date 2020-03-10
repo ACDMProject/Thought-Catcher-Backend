@@ -15,8 +15,6 @@ const connection = mysql.createConnection({
   database: process.env.DB_SCHEMA
 });
 
-// req - request , res - response
-//retrieve tasks 
 app.get('/Thoughts', function (req, res) {
   connection.query('SELECT * FROM `Mood_table` WHERE `userId` = "1"', function (error, results, fields) {
     // error will be an Error if one occurred during the query
@@ -34,19 +32,23 @@ app.get('/Thoughts', function (req, res) {
 });
 
 app.post('/Thoughts', function (req, res) {
-  // Take input from client and information of the task to be created
+  
   const thoughtToInsert = req.body;
-  // Take that information and pre-populate an SQL INSERT statement and execute
-  connection.query('INSERT INTO `Mood_table` SET ?', thoughtToInsert, function (error, results, fields) {
-    // error will be an Error if one occurred during the query
-    if (error) {
+  
+// Take that information and pre-populate an SQL INSERT statement and execute
+
+connection.query('INSERT INTO `Mood_table` SET ?', thoughtToInsert, function (error, results, fields) {
+    
+  
+  
+  if (error) {
       console.error("Your query had a problem with adding thoughts", error);
       res.status(500).json({ errorMessage: error });
     }
     else {
-      // Output the task that has been created
+     
       res.json({
-        task: thoughtToInsert
+        newThought: thoughtToInsert
       });
     }
   })
@@ -70,7 +72,7 @@ app.post('/Thoughts', function (req, res) {
 
 app.delete('/Thoughts/:Id', function (req, res) {
 
-  // work out which task needs deleting
+ 
   const thoughtToDelete = req.params.Id;
   // Run DELETE SQL command
   connection.query('DELETE FROM `Mood_table` WHERE `Id` = ?', thoughtToDelete, function (error, results, fields) {
@@ -79,7 +81,7 @@ app.delete('/Thoughts/:Id', function (req, res) {
       res.status(500).json({ errorMessage: error });
     }
     else {
-      // Return to client info about task that has been deleted
+      // Return to client info about what has been deleted
       res.json({
         deletedThought: thoughtToDelete,
         message: "The above thought was deleted"
@@ -90,7 +92,5 @@ app.delete('/Thoughts/:Id', function (req, res) {
 
 
 
-module.exports.tasks = serverless(app);
-
-//        the above .tasks needs to match our function in our .yml file 
+module.exports.thoughts = serverless(app);
 
