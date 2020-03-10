@@ -1,18 +1,96 @@
 'use strict';
 
-module.exports.hello = async event => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const serverless = require('serverless-http');
+const express = require('express');
+const mysql = require('mysql');
+const app = express();
+app.use(express.json());
+const cors = require('cors');
+app.use(cors());
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_SCHEMA
+});
+
+// req - request , res - response
+//retrieve tasks 
+app.get('/Thoughts', function (req, res) {
+  connection.query('SELECT * FROM `Mood_table` WHERE `userId` = "1"', function (error, results, fields) {
+    // error will be an Error if one occurred during the query
+    if (error) {
+      console.error("Your query had a problem with fetching your logged thoughts", error);
+      res.status(500).json({ errorMessage: error });
+    }
+    else {
+      // Query was successful
+      res.json({
+        thoughts: results
+      });
+    }
+  });
+});
+
+app.post('/Thoughts', function (req, res) {
+  // Take input from client and information of the task to be created
+  const thoughtToInsert = req.body;
+  // Take that information and pre-populate an SQL INSERT statement and execute
+  connection.query('INSERT INTO `Mood_table` SET ?', thoughtToInsert, function (error, results, fields) {
+    // error will be an Error if one occurred during the query
+    if (error) {
+      console.error("Your query had a problem with adding thoughts", error);
+      res.status(500).json({ errorMessage: error });
+    }
+    else {
+      // Output the task that has been created
+      res.json({
+        task: thoughtToInsert
+      });
+    }
+  })
+});
+
+// app.put('/Thoughts/:Id', function (req, res) {
+//   //take the task to edit
+//   connection.query(' UPDATE `Mood_table` SET `Timestamp` = ?, `Mood` = ?, `important` = ?  WHERE `uuid` = ?', [req.body.description, req.body.completed, req.body.important, req.body.taskId], function (error, results, fields) {
+//     // error will be an Error if one occurred during the query
+//     if (error) {
+//       console.error("Your query had a problem with editing tasks", error);
+//       res.status(500).json({ errorMessage: error });
+//     }
+//     else {
+//       res.json({
+//        message: 'Your task has been edited'
+//       });
+//     }
+//   })
+// });
+
+app.delete('/Thoughts/:Id', function (req, res) {
+
+  // work out which task needs deleting
+  const thoughtToDelete = req.params.Id;
+  // Run DELETE SQL command
+  connection.query('DELETE FROM `Mood_table` WHERE `Id` = ?', thoughtToDelete, function (error, results, fields) {
+    if (error) {
+      console.error("Your query had a problem with deleting your thought", error);
+      res.status(500).json({ errorMessage: error });
+    }
+    else {
+      // Return to client info about task that has been deleted
+      res.json({
+        deletedThought: thoughtToDelete,
+        message: "The above thought was deleted"
+      });
+    }
+  })
+});
+
+
+
+module.exports.tasks = serverless(app);
+
+//        the above .tasks needs to match our function in our .yml file 
+
