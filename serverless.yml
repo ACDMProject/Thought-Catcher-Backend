@@ -30,4 +30,3 @@ functions:
          path: Thoughts/{Id}
          method: delete
          cors: true
-
