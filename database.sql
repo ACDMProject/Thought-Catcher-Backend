@@ -53,7 +53,8 @@ CREATE TABLE `Mood_table` (
   `Thoughts` varchar(150) DEFAULT NULL,
   `Distortion` varchar(150) DEFAULT NULL,
   `Distortion_Index` int(25) DEFAULT NULL,
-  `Response` varchar(150) DEFAULT NULL
+  `Response` varchar(150) DEFAULT NULL,
+  `Mood_intensity` varchar(25) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,6 +64,7 @@ CREATE TABLE `Mood_table` (
 
 LOCK TABLES `Mood_table` WRITE;
 /*!40000 ALTER TABLE `Mood_table` DISABLE KEYS */;
+INSERT INTO `Mood_table` VALUES ('1','2020-03-20 11:03:03','Sad',4,'DOREM IPSUM LA DI DA','Overeacting',3,'RESPONSE ANSWER',NULL),('2','2020-04-19 10:00:19','Inspired',2,'DOREM IPSUM LA DI DA','Disqualifying the Positive',6,'RESPONSE ANSWER 2',NULL),('3','2020-08-07 06:54:50','Happy',1,'Thought ','All or Nothing',1,'Response 4','8'),('5','2020-05-02 09:45:17','Inspired\" ',2,'Thought 2','Jumping to Conclusions',2,'Response 5','9'),('4','2020-07-04 16:25:12','Excited',3,'Thought 3','Overgeneralisation',3,'Response 6','10'),('8','2020-07-20 18:24:15','Neutral',4,'Thought 4','Catastrophising',4,'Response 9','6'),('7','2020-06-01 12:16:52','Anxious',5,'Thought 5','Mental filtering',5,'Response 8','7'),('9','2020-12-02 17:03:30','Exhausted',6,'Thought 6','Disqualifying the Positive',6,'Response 7','2'),('6','2020-04-17 08:12:22','Sad',7,'Thought 7','Personalisation',7,'Response 10','9'),('10','2020-11-15 14:44:42','Overwhelmed',8,'Thought 8','Shoulds and Oughts',8,'Response 11','1'),('11','2020-10-14 06:26:37','Stressed',9,'Thought 9','Emotional Reasoning',9,'Response 12','8'),('13','2020-09-26 20:47:57','Angry',10,'Thought 10','Labelling',10,'Response 13','10');
 /*!40000 ALTER TABLE `Mood_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,4 +100,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-10 21:15:20
+-- Dump completed on 2020-03-11 22:00:19
