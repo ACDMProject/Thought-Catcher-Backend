@@ -16,7 +16,7 @@ const connection = mysql.createConnection({
 });
 
 app.get('/Thoughts', function (req, res) {
-  connection.query('SELECT * FROM `Mood_table` WHERE `userId` = "1"', function (error, results, fields) {
+  connection.query('SELECT * FROM `Mood_table`', function (error, results, fields) {
     // error will be an Error if one occurred during the query
     if (error) {
       console.error("Your query had a problem with fetching your logged thoughts", error);

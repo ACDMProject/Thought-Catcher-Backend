@@ -11,7 +11,7 @@ provider:
     DB_SCHEMA: ${file(./config.${self:provider.stage}.json):DB_SCHEMA}
 
 functions:
-  tasksAWS:
+  Thoughts:
     handler: handler.thoughts
     events:
       - http:
