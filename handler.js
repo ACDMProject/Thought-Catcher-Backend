@@ -78,7 +78,7 @@ app.delete("/Thoughts/:Id", function(req, res) {
 	const thoughtToDelete = req.params.Id;
 	// Run DELETE SQL command
 	connection.query(
-		"DELETE FROM `Mood_table` WHERE `Id` = ?",
+		"DELETE FROM `Mood_table` WHERE `uuid` = ?",
 		thoughtToDelete,
 		function(error, results, fields) {
 			if (error) {
