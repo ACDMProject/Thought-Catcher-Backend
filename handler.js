@@ -15,25 +15,25 @@ const connection = mysql.createConnection({
 	database: process.env.DB_SCHEMA
 });
 
-// app.get('/Thoughts', function (req, res) {
-//   connection.query('SELECT * FROM `Mood_table`', function (error, results, fields) {
-//     // error will be an Error if one occurred during the query
-//     if (error) {
-//       console.error("Your query had a problem with fetching your logged thoughts", error);
-//       res.status(500).json({ errorMessage: error });
-//     }
-//     else {
-//       // Query was successful
-//       res.json({
-//         thoughts: results
-//       });
-//     }
-//   });
-// });
-
 app.get("/Thoughts", function(req, res) {
-	res.json({
-		message: "working"
+	connection.query("SELECT * FROM `Mood_table`", function(
+		error,
+		results,
+		fields
+	) {
+		// error will be an Error if one occurred during the query
+		if (error) {
+			console.error(
+				"Your query had a problem with fetching your logged thoughts",
+				error
+			);
+			res.status(500).json({ errorMessage: error });
+		} else {
+			// Query was successful
+			res.json({
+				thoughts: results
+			});
+		}
 	});
 });
 
