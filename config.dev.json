@@ -1,0 +1,6 @@
+{
+  "DB_HOST": "si2t-rds.cqnzctks4m73.eu-west-2.rds.amazonaws.com",
+  "DB_USER": "Admin",
+  "DB_PASSWORD": "Password",
+  "DB_SCHEMA": "ThoughtCatcher"
+}
