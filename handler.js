@@ -1,57 +1,61 @@
-'use strict';
+"use strict";
 
-const serverless = require('serverless-http');
-const express = require('express');
-const mysql = require('mysql');
+const serverless = require("serverless-http");
+const express = require("express");
+const mysql = require("mysql");
 const app = express();
 app.use(express.json());
-const cors = require('cors');
+const cors = require("cors");
 app.use(cors());
 
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_SCHEMA
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_SCHEMA
 });
 
-app.get('/Thoughts', function (req, res) {
-  connection.query('SELECT * FROM `Mood_table`', function (error, results, fields) {
-    // error will be an Error if one occurred during the query
-    if (error) {
-      console.error("Your query had a problem with fetching your logged thoughts", error);
-      res.status(500).json({ errorMessage: error });
-    }
-    else {
-      // Query was successful
-      res.json({
-        thoughts: results
-      });
-    }
-  });
+app.get("/Thoughts", function(req, res) {
+	connection.query("SELECT * FROM `Mood_table`", function(
+		error,
+		results,
+		fields
+	) {
+		// error will be an Error if one occurred during the query
+		if (error) {
+			console.error(
+				"Your query had a problem with fetching your logged thoughts",
+				error
+			);
+			res.status(500).json({ errorMessage: error });
+		} else {
+			// Query was successful
+			res.json({
+				thoughts: results
+			});
+		}
+	});
 });
 
-app.post('/Thoughts', function (req, res) {
-  
-  const thoughtToInsert = req.body;
-  
-// Take that information and pre-populate an SQL INSERT statement and execute
+app.post("/Thoughts", function(req, res) {
+	const thoughtToInsert = req.body;
 
-connection.query('INSERT INTO `Mood_table` SET ?', thoughtToInsert, function (error, results, fields) {
-    
-  
-  
-  if (error) {
-      console.error("Your query had a problem with adding thoughts", error);
-      res.status(500).json({ errorMessage: error });
-    }
-    else {
-     
-      res.json({
-        newThought: thoughtToInsert
-      });
-    }
-  })
+	// Take that information and pre-populate an SQL INSERT statement and execute
+
+	connection.query("INSERT INTO `Mood_table` SET ?", thoughtToInsert, function(
+		error,
+		results,
+		fields
+	) {
+		if (error) {
+			console.error("Your query had a problem with adding thoughts", error);
+			res.status(500).json({ errorMessage: error });
+		} else {
+			res.json({
+				newThought: thoughtToInsert
+			});
+		}
+	});
 });
 
 // app.put('/Thoughts/:Id', function (req, res) {
@@ -70,27 +74,28 @@ connection.query('INSERT INTO `Mood_table` SET ?', thoughtToInsert, function (er
 //   })
 // });
 
-app.delete('/Thoughts/:Id', function (req, res) {
-
- 
-  const thoughtToDelete = req.params.Id;
-  // Run DELETE SQL command
-  connection.query('DELETE FROM `Mood_table` WHERE `Id` = ?', thoughtToDelete, function (error, results, fields) {
-    if (error) {
-      console.error("Your query had a problem with deleting your thought", error);
-      res.status(500).json({ errorMessage: error });
-    }
-    else {
-      // Return to client info about what has been deleted
-      res.json({
-        deletedThought: thoughtToDelete,
-        message: "The above thought was deleted"
-      });
-    }
-  })
+app.delete("/Thoughts/:Id", function(req, res) {
+	const thoughtToDelete = req.params.Id;
+	// Run DELETE SQL command
+	connection.query(
+		"DELETE FROM `Mood_table` WHERE `uuid` = ?",
+		thoughtToDelete,
+		function(error, results, fields) {
+			if (error) {
+				console.error(
+					"Your query had a problem with deleting your thought",
+					error
+				);
+				res.status(500).json({ errorMessage: error });
+			} else {
+				// Return to client info about what has been deleted
+				res.json({
+					deletedThought: thoughtToDelete,
+					message: "The above thought was deleted"
+				});
+			}
+		}
+	);
 });
 
-
-
 module.exports.thoughts = serverless(app);
-
