@@ -58,6 +58,48 @@ app.post("/Thoughts", function(req, res) {
 	});
 });
 
+app.get("/Users", function(req, res) {
+	connection.query("SELECT * FROM `Users`", function(
+		error,
+		results,
+		fields
+	) {
+		// error will be an Error if one occurred during the query
+		if (error) {
+			console.error(
+				"user not found",
+				error
+			);
+			res.status(500).json({ errorMessage: error });
+		} else {
+			// Query was successful
+			res.json({
+				users: results
+			});
+		}
+	});
+});
+
+app.post("/Users", function(req, res) {
+	const loginToAdd = req.body;
+
+	// Take that information and pre-populate an SQL INSERT statement and execute
+
+	connection.query("INSERT INTO `Users` SET ?", loginToAdd, function(
+		error,
+		results,
+		fields
+	) {
+		if (error) {
+			console.error("Your query had a problem with adding new user", error);
+			res.status(500).json({ errorMessage: error });
+		} else {
+			res.json({
+				newUser: loginToAdd
+			});
+		}
+	});
+});
 // app.put('/Thoughts/:Id', function (req, res) {
 //   //take the task to edit
 //   connection.query(' UPDATE `Mood_table` SET `Timestamp` = ?, `Mood` = ?, `important` = ?  WHERE `uuid` = ?', [req.body.description, req.body.completed, req.body.important, req.body.taskId], function (error, results, fields) {
