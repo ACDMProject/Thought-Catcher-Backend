@@ -30,3 +30,11 @@ functions:
          path: Thoughts/{Id}
          method: delete
          cors: true
+      - http:
+         path: Users
+         method: get
+         cors: true
+      - http:
+         path: Users
+         method: post
+         cors: true
